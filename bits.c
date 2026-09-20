@@ -73,7 +73,16 @@ int samesign(int x, int y) {
  *   Difficulty: 4
  */
 int logtwo(int v) {
-    return 2;
+    int d4=(v>0xffff)<<4;
+    v=v>>d4;
+    int d3=(v>0xff)<<3;
+    v=v>>d3;
+    int d2=(v>0xf)<<2;
+    v=v>>d2;
+    int d1=(v>3)<<1;
+    v=v>>d1;
+    int d0=(v>1);
+    return d4|d3|d2|d1|d0;
 }
 
 /*
@@ -86,7 +95,8 @@ int logtwo(int v) {
  *    Difficulty: 2
  */
 int byteSwap(int x, int n, int m) {
-    return 2;
+    int y=((x>>(n<<3))&0xff)^((x>>(m<<3))&0xff);
+    return x^(y<<(n<<3))^(y<<(m<<3));
 }
 
 /*
@@ -98,6 +108,7 @@ int byteSwap(int x, int n, int m) {
  *   Difficulty: 3
  */
 unsigned reverse(unsigned v) {
+    
     return 2;
 }
 
