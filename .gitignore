@@ -8,3 +8,5 @@ result.txt
 __pycache__
 yacctab.py
 lextab.py
+.DS_Store
+**/.DS_Store
