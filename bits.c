@@ -108,8 +108,26 @@ int byteSwap(int x, int n, int m) {
  *   Difficulty: 3
  */
 unsigned reverse(unsigned v) {
-    
-    return 2;
+    unsigned Mask=0xffff;
+    for (int i=1;(i-6);i=i+1){
+        unsigned n_blk=1u<<i;
+        unsigned l_blk=1u<<(5-i);
+        unsigned mask=Mask;
+        unsigned mask_=~Mask;
+        for (unsigned j=0;(j-n_blk);j=j+2){
+            mask_=~mask;
+            unsigned maask=mask<<l_blk;
+            unsigned maask_=~maask;
+            unsigned x=(maask&v);
+            unsigned y=mask&v;
+            v=v&maask_&mask_;
+            v=v|(x>>l_blk)|(y<<l_blk);
+            mask=(mask<<l_blk)<<l_blk;
+            
+        }
+        Mask=Mask>>(1u<<(4-i));
+    }
+    return v;
 }
 
 /*
