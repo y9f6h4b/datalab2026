@@ -179,7 +179,26 @@ int leftBitCount(int x) {
  *   Difficulty: 4
  */
 unsigned float_i2f(int x) {
-    return 2;
+    if(!x) return 0;
+    int sgn=(0x80000000)&x;
+    if(sgn) x=-x;
+    int log;
+    if(x==-2147483648) log=31; else log=logtwo(x);
+    
+    int e =log+127;
+    int m;
+    if(log<=23){
+        m=(x<<(23-log));
+    }
+    else{
+        int crit=1<<(log-24);
+        
+        int t=((crit<<1)-1)&x;
+        m=x>>(log-23);
+        m=m+((t>crit)|((t==crit)&(m&1)));
+        if((m&0x1ffffff)==0x1000000) e=e+1;
+    }
+    return sgn|(e<<23)|(m&(0x7fffff));
 }
 
 /*
@@ -194,7 +213,11 @@ unsigned float_i2f(int x) {
  *   Difficulty: 4
  */
 unsigned floatScale2(unsigned uf) {
-    return 2;
+    if((uf&0x7fffffff)==0) return uf;
+    int e=(uf&0x7f800000)>>23;
+    if(e==0) return ((uf&0x7fffff)<<1)|(uf&0x80000000);
+    else if(e==0xff) return uf;
+    else return ((e+1)<<23)|(uf&0x807fffff);
 }
 
 /*
