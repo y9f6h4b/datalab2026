@@ -234,7 +234,21 @@ unsigned floatScale2(unsigned uf) {
  *   Difficulty: 3
  */
 int float64_f2i(unsigned uf1, unsigned uf2) {
-    return 2;
+    int e=(uf2&0x7ff00000)>>20;
+    if(e<1023) return 0;
+    else if(e>=1054) return 0x80000000;
+
+    e=e-1023;
+    int x=(uf2&0x000fffff)|0x00100000;
+    int ans;
+    if(e<=20) ans= x>>(20-e);
+    else {
+        int a =e-20;
+        int b=32-a;
+        ans= (x<<a)|(((uf1&(~((1<<b)-1)))>>b)&((1<<a)-1));
+    }
+    
+    if(uf2&0x80000000) return ~ans+1; else return ans;
 }
 
 /*
